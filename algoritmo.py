@@ -30,7 +30,7 @@ def segmentar_oracion(oracion, diccionario):
             palabra = oracion[j:i]
             if palabra in conjunto_diccionaria:
                 lista_encontrada[i] = lista_encontrada[j] + [palabra]
-                # print(lista_encontrada[i], "\n")
+                print(lista_encontrada[i], "\n")
                 break
 
     return lista_encontrada[n]

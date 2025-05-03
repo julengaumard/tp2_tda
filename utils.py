@@ -56,3 +56,20 @@ def parsear_resultados(path):
         bloques.append(bloque_actual)
 
     return bloques
+
+
+def performance(funcion):
+    """
+    Decorador para medir el tiempo de ejecución de una función.
+    :param funcion: Función a medir.
+    """
+    import time
+
+    def wrapper(*args, **kwargs):
+        inicio = time.time()
+        resultado = funcion(*args, **kwargs)
+        fin = time.time()
+        print(f"Tiempo de ejecución: {fin - inicio:.4f} segundos")
+        return resultado
+
+    return wrapper
