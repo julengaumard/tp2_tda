@@ -27,6 +27,37 @@ def wrapper_leer_archivo(path_oraciones, path_diccionario):
     return resultado_in, resultado_out
 
 
+# def parsear_resultados(path):
+#     with open(path, 'r', encoding='utf-8') as f:
+#         lineas = [line.strip() for line in f if line.strip()]
+
+#     bloques = []
+#     bloque_actual = None
+
+#     for linea in lineas:
+#         if linea.startswith("Palabras:") and "entrada:" in linea:
+
+#             if bloque_actual:
+#                 bloques.append(bloque_actual)
+
+#             palabras_file = re.search(r"Palabras:\s*([^\s,]+)", linea).group(1)
+#             entrada_file = re.search(r"entrada:\s*([^\s,]+)", linea).group(1)
+
+#             bloque_actual = {
+#                 "palabras": 'casos/' + palabras_file,
+#                 "entrada": 'casos/' + entrada_file,
+#                 "mensajes": []
+#             }
+#         else:
+#             if bloque_actual is not None:
+#                 bloque_actual["mensajes"].append(linea)
+
+#     if bloque_actual:
+#         bloques.append(bloque_actual)
+
+#     return bloques
+
+
 def parsear_resultados(path):
     with open(path, 'r', encoding='utf-8') as f:
         lineas = [line.strip() for line in f if line.strip()]
@@ -35,27 +66,32 @@ def parsear_resultados(path):
     bloque_actual = None
 
     for linea in lineas:
+        # Si encontramos un encabezado de bloque nuevo
         if linea.startswith("Palabras:") and "entrada:" in linea:
-
-            if bloque_actual:
+            # Si ya estábamos en un bloque anterior, lo guardamos
+            if bloque_actual is not None:
                 bloques.append(bloque_actual)
 
             palabras_file = re.search(r"Palabras:\s*([^\s,]+)", linea).group(1)
             entrada_file = re.search(r"entrada:\s*([^\s,]+)", linea).group(1)
 
+            # Comenzamos un nuevo bloque
             bloque_actual = {
                 "palabras": 'casos/' + palabras_file,
                 "entrada": 'casos/' + entrada_file,
                 "mensajes": []
             }
-        else:
-            if bloque_actual is not None:
-                bloque_actual["mensajes"].append(linea)
 
-    if bloque_actual:
+        # Si no es encabezado, agregamos la línea como mensaje al bloque actual
+        elif bloque_actual is not None:
+            bloque_actual["mensajes"].append(linea)
+
+    # Guardamos el último bloque si existe
+    if bloque_actual is not None:
         bloques.append(bloque_actual)
 
     return bloques
+
 
 
 def performance(funcion):
