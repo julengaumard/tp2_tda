@@ -20,17 +20,38 @@ def procesar_texto(oraciones, diccionario):
 
 def segmentar_oracion(oracion, diccionario):
     n = len(oracion)
-    conjunto_diccionaria = set(diccionario)
+    conjunto_diccionario = set(diccionario)
 
-    lista_encontrada = [[] for _ in range(n + 1)]
-    lista_encontrada[0] = []
+    existencia_parcial = [False] * (n + 1)
+    existencia_parcial[0] = True
+
+    path = [None] * (n + 1)
 
     for i in range(1, n + 1):
         for j in range(i):
-            palabra = oracion[j:i]
-            if palabra in conjunto_diccionaria:
-                lista_encontrada[i] = lista_encontrada[j] + [palabra]
-                # print(lista_encontrada[i], "\n")
+            if existencia_parcial[j] and oracion[j:i] in conjunto_diccionario:
+                existencia_parcial[i] = True
+                path[i] = (j, oracion[j:i])
                 break
 
-    return lista_encontrada[n]
+    if not existencia_parcial[n]:
+        return []
+
+    return reconstruir_segmentacion(path, n)
+
+
+def reconstruir_segmentacion(path, n):
+    """
+    Reconstruye la segmentación de una oración a partir del camino dado.
+    :param path: Lista de tuplas que representan el camino de segmentación.
+    :param n: Longitud de la oración original.
+    :return: Lista de palabras segmentadas.
+    """
+    resultado = []
+    idx = n
+    while idx > 0:
+        j, palabra = path[idx]
+        resultado.append(palabra)
+        idx = j
+
+    return resultado[::-1]
