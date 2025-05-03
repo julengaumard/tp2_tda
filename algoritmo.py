@@ -11,9 +11,9 @@ def procesar_texto(oraciones, diccionario):
         oracion_segmentada = segmentar_oracion(oracion, diccionario)
 
         if len("".join(oracion_segmentada)) < len(oracion):
-            resultado.append(["No es un mensaje"])
+            resultado.append("No es un mensaje")
         else:
-            resultado.append(oracion_segmentada)
+            resultado.append(" ".join(oracion_segmentada))
 
     return resultado
 
@@ -22,7 +22,7 @@ def segmentar_oracion(oracion, diccionario):
     n = len(oracion)
     conjunto_diccionaria = set(diccionario)
 
-    lista_encontrada = [list()] * (n + 1)
+    lista_encontrada = [[] for _ in range(n + 1)]
     lista_encontrada[0] = []
 
     for i in range(1, n + 1):

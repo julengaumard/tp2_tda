@@ -1,5 +1,7 @@
+from ctypes.util import test
 from algoritmo import procesar_texto
 from utils import wrapper_leer_archivo
+import unittest
 
 
 def main(argc, argv):
@@ -8,6 +10,18 @@ def main(argc, argv):
     :param argc: Número de argumentos de la línea de comandos.
     :param argv: Lista de argumentos de la línea de comandos.
     """
+    if argc == 2:
+        if argv[1] == "test":
+            loader = unittest.TestLoader()
+            tests = loader.discover('./tests', pattern='test_*.py')
+            test_runner = unittest.TextTestRunner()
+            test_runner.run(tests)
+            sys.exit(0)
+
+        print("Uso: python tp2.py test")
+        print("Uso: python tp2.py <archivo_oraciones> <archivo_diccionario>")
+        return
+
     if argc != 3:
         print("Uso: python tp2.py <archivo_oraciones> <archivo_diccionario>")
         return
