@@ -1,7 +1,7 @@
-from ctypes.util import test
+import unittest
 from algoritmo import procesar_texto
 from utils import wrapper_leer_archivo
-import unittest
+from casos import test_procesar_texto
 
 
 def main(argc, argv):
@@ -16,6 +16,10 @@ def main(argc, argv):
             tests = loader.discover('./tests', pattern='test_*.py')
             test_runner = unittest.TextTestRunner()
             test_runner.run(tests)
+            sys.exit(0)
+
+        if argv[1] == "ejemplo":
+            test_procesar_texto()
             sys.exit(0)
 
         print("Uso: python tp2.py test")
