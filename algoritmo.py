@@ -7,6 +7,7 @@ def procesar_texto(oraciones, diccionario):
     """
     resultado = []
 
+
     for oracion in oraciones:
         oracion_segmentada = segmentar_oracion(oracion, diccionario)
 
