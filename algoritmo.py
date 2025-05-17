@@ -22,14 +22,14 @@ def procesar_texto(oraciones, diccionario):
 def segmentar_oracion(oracion, diccionario):
     n = len(oracion)
     conjunto_diccionario = set(diccionario)
+    max_long_palabra = max(len(palabra) for palabra in diccionario)
 
     existencia_parcial = [False] * (n + 1)
     existencia_parcial[0] = True
-
     path = [None] * (n + 1)
 
     for i in range(1, n + 1):
-        for j in range(i):
+        for j in range(max(0, i - max_long_palabra), i):
             if existencia_parcial[j] and oracion[j:i] in conjunto_diccionario:
                 existencia_parcial[i] = True
                 path[i] = (j, oracion[j:i])
