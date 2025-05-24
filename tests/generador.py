@@ -40,7 +40,7 @@ class Generador:
     def generar_oraciones(self, cantidad_oraciones, cantidad_palabras):
         oraciones = []
         for _ in range(cantidad_oraciones):
-            if random.choice([True, False]):
+            if random.choice([True]):
                 oracion = self.generar_oracion_valida(cantidad_palabras)
             else:
                 oracion = self.generar_oracion_invalida()

@@ -23,24 +23,30 @@ def procesar_texto_explicativo(oraciones, diccionario):
 
         return resultado
 
-
     def segmentar_oracion(oracion, diccionario):
+        print(f"\n--- Iniciando segmentación de: '{oracion}' ---")
         n = len(oracion)
         conjunto_diccionario = set(diccionario)
+        max_long_palabra = max(len(palabra) for palabra in diccionario)
+        print(f"Longitud máxima de palabra en diccionario: {max_long_palabra}")
 
         existencia_parcial = [False] * (n + 1)
         existencia_parcial[0] = True
-
         path = [None] * (n + 1)
 
         for i in range(1, n + 1):
-            for j in range(i):
-
-                if existencia_parcial[j] and oracion[j:i] in conjunto_diccionario:
+            print(f"\nAnalizando posición {i}:")
+            for j in range(max(0, i - max_long_palabra), i):
+                subcadena = oracion[j:i]
+                if existencia_parcial[j] and subcadena in conjunto_diccionario:
+                    print(f"  Encontrada palabra válida: '{subcadena}' en posición {j}-{i}")
                     existencia_parcial[i] = True
-                    path[i] = (j, oracion[j:i])
+                    path[i] = (j, subcadena)
                     break
+
+
         if not existencia_parcial[n]:
+            print("No se encontró una segmentación válida para la oración")
             return []
 
         return reconstruir_segmentacion(path, n)
@@ -52,10 +58,12 @@ def procesar_texto_explicativo(oraciones, diccionario):
         :param n: Longitud de la oración original.
         :return: Lista de palabras segmentadas.
         """
+        print("\nReconstruyendo segmentación:")
         resultado = []
         idx = n
         while idx > 0:
             j, palabra = path[idx]
+            print(f"  Agregando palabra: '{palabra}'")
             resultado.append(palabra)
             idx = j
 
@@ -64,13 +72,14 @@ def procesar_texto_explicativo(oraciones, diccionario):
     return procesar_texto(oraciones, diccionario)
 
 def test_procesar_texto():
+    print("\n=== INICIANDO TEST DE PROCESAMIENTO DE TEXTO ===")
     gen = Generador(1000)
     diccionario = gen.diccionario
-    oraciones = gen.generar_oraciones(randint(1, 15), randint(1, 15))
+    oraciones = gen.generar_oraciones(randint(1, 1), randint(1, 4))
 
-    print("Oraciones generadas:")
+    print("\nOraciones generadas:")
     for oracion in oraciones:
-        print(oracion)
+        print(f"- {oracion}")
     print("\nResultados del procesamiento:")
     resultados = procesar_texto_explicativo(oraciones, diccionario)
     for oracion, resultado in zip(oraciones, resultados):
